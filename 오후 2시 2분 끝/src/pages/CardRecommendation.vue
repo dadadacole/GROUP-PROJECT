@@ -20,18 +20,21 @@
             <li>대중교통 10% 할인</li>
             <li>생활서비스 5% 할인</li>
             <li>KB Pay 이용 시 생활서비스 5% 추가할인</li>
+            <br>
         </ul>
         </p>
+    </div>   
+    <div class="button-container">
         <a
           href="https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?cooperationcode=09321&mainCC=a"
-          class="btn btn-primary"
+          class="btn btn-primary "
           target="_blank"
+          
           >링크 이동</a
         >
         <button @click="calculate1" class="btn btn-primary">계산</button>
       </div>
-    </div>
-
+</div>
     <div class="card" style="width: 400px">
       <img
         class="card-img-bottom"
@@ -48,17 +51,19 @@
             <li>Happy Birth Month / 전월실적 채워드림</li>
         </ul>
         </p>
+        
+    </div>
+    <div class="button-container">
         <a
           href="https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09123&eventNum=&cateType=&cateIdx=&channelMedCate=&channelSmaCate=&pageNo=&%EC%B9%B4%EB%93%9C%EC%83%81%ED%92%88%EB%B6%84%EB%A5%98%EC%BD%94%EB%93%9C%EB%B2%88%ED%98%B8%EC%84%A0%ED%83%9D="
-          class="btn btn-primary"
+          class="btn btn-primary "
           target="_blank"
+          
           >링크 이동</a
         >
         <button @click="calculate" class="btn btn-primary">계산</button>
       </div>
-    </div>
-
-    <br />
+</div>
 
     <div class="card" style="width: 400px">
       <img
@@ -72,14 +77,18 @@
         <p class="card-text">
             학습비 자동납부 1.2/1.7만원 청구할인
         </p>
+        
+    </div>
+    <div class="button-container-location" >
         <a
           href="https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04334"
-          class="btn btn-primary"
+          class="btn btn-primary "
           target="_blank"
+          
           >링크 이동</a
         >
       </div>
-    </div>
+</div>
 </div>
 </div>
 <div class="d-flex justify-content-start">
@@ -99,15 +108,18 @@
          <li>3대 영역 5~10% 청구할인</li>
         </ul>
         </p>
+        
+    </div>
+    <div class="button-container">
         <a
           href="https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04451"
-          class="btn btn-primary"
+          class="btn btn-primary "
           target="_blank"
+          
           >링크 이동</a
         >
       </div>
-    </div>
-
+</div>
     <div class="card" style="max-width: 400px">
       <img
         class="card-img-top"
@@ -120,15 +132,19 @@
         <p class="card-text">
             SKT 통신요금 자동납부 1만2천원/1만7천 청구할인
         </p>
-        <a
+        
+        
+    </div>
+    <div class="button-container">
+    <a
           href="https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=04288"
-          class="btn btn-primary"
+          class="btn btn-primary "
           target="_blank"
+          
           >링크 이동</a
         >
       </div>
-    </div>
-
+</div>
     <div class="card" style="max-width: 400px">
       <img
         class="card-img-top"
@@ -145,107 +161,105 @@
             <li>오프라인 쇼핑, 온라인 항공/면세점 5% 할인 (KB Pay)</li>
         </ul>
         </p>
+        
+    </div>
+    <div class="button-container">
         <a
           href="https://card.kbcard.com/CRD/DVIEW/HCAMCXPRICAC0076?mainCC=a&cooperationcode=09116"
-          class="btn btn-primary"
+          class="btn btn-primary "
           target="_blank"
+          
           >링크 이동</a
         >
       </div>
-    </div>
   </div>
-  
+  </div>
 </template>
+
+<style>
+.btn-primary{
+    background-color: #967E76;
+    color: black;
+    font-weight: bold;
+    border:none
+}  
+.button-container {
+      position: absolute; /* 버튼 컨테이너는 절대적 위치 설정 */
+      bottom: 20px; /* 아래쪽 여백 */
+      left: 50%; /* 가운데 정렬을 위해 왼쪽 여백 설정 */
+      transform: translateX(-50%); /* 가운데 정렬 */
+    }
+.card-body{
+  padding: 50px;
+}
+.button-container-location{
+  padding: 30px;
+}
+
+</style>
 
 <script>
 import axios from 'axios';
 
 export default {
   methods: {
+    async calculate() {
+      try {
+        const response = await axios.get('http://localhost:3000/expenditures');
+        if (response.status === 200) {
+          const expenditureData = Array.isArray(response.data) ? response.data : [];
+          
+          // 1. 모든 "amount" 값의 합 계산
+          const totalAmount = expenditureData.reduce((acc, item) => acc + item.amount, 0);
+          
+          // 2. "미용" 카테고리의 합계를 고려한 값의 차 계산
+          const beautyTotal = expenditureData
+            .filter(item => item.category === '문화생활')
+            .reduce((acc, item) => acc + item.amount, 0);
+          const adjustedTotalAmount = totalAmount - (beautyTotal * 0.3);
+
+          // 혜택 계산
+          const benefit = totalAmount - adjustedTotalAmount;
+
+          // 두 값 모두 알림창으로 표시
+          alert(`적용 전: ${totalAmount.toLocaleString()}, 적용 후: ${adjustedTotalAmount.toLocaleString()}, 혜택: ${benefit.toLocaleString()}`);
+        } else {
+          alert('데이터 조회 실패');
+        }
+      } catch (error) {
+        alert('에러발생 : ' + error);
+      }
+    },
     async calculate1() {
       try {
         const response = await axios.get('http://localhost:3000/expenditures');
         if (response.status === 200) {
           const expenditureData = Array.isArray(response.data) ? response.data : [];
           
-          // 현재 날짜 정보 가져오기
-          const currentDate = new Date();
-          const currentMonth = currentDate.getMonth() + 1; // 0부터 시작하는 월 값을 1부터 시작하는 값으로 변경
-          const currentYear = currentDate.getFullYear(); // 현재 연도 가져오기
-
-          // 현재 달의 데이터만 필터링
-          const currentMonthData = expenditureData.filter(item => {
-            const itemDate = new Date(item.date);
-            const itemMonth = itemDate.getMonth() + 1;
-            const itemYear = itemDate.getFullYear();
-            return itemMonth === currentMonth && itemYear === currentYear; // 현재 연도의 현재 달에 해당하는 데이터만 필터링
-          });
-          
           // 1. 모든 "amount" 값의 합 계산
-          const totalAmount = currentMonthData.reduce((acc, item) => acc + item.amount, 0);
+          const totalAmount = expenditureData.reduce((acc, item) => acc + item.amount, 0);
           
-          // 2. "문화생활" 카테고리의 합계를 고려한 값의 차 계산
-          const cultureTotal = currentMonthData
+          // 2. "미용" 카테고리의 합계를 고려한 값의 차 계산
+          const beautyTotal = expenditureData
             .filter(item => item.category === '교통')
             .reduce((acc, item) => acc + item.amount, 0);
-          const adjustedTotalAmount = totalAmount - (cultureTotal * 0.1);
-          
-          // 3. 혜택 계산
+          const adjustedTotalAmount = totalAmount - (beautyTotal * 0.1);
+
+          // 혜택 계산
           const benefit = totalAmount - adjustedTotalAmount;
 
-          // 결과를 알림창으로 표시
+          // 두 값 모두 알림창으로 표시
           alert(`적용 전: ${totalAmount.toLocaleString()}, 적용 후: ${adjustedTotalAmount.toLocaleString()}, 혜택: ${benefit.toLocaleString()}`);
         } else {
           alert('데이터 조회 실패');
         }
       } catch (error) {
-        alert('에러 발생: ' + error);
+        alert('에러발생 : ' + error);
       }
     }
-      ,async calculate() {
-      try {
-        const response = await axios.get('http://localhost:3000/expenditures');
-        if (response.status === 200) {
-          const expenditureData = Array.isArray(response.data) ? response.data : [];
-          
-          // 현재 날짜 정보 가져오기
-          const currentDate = new Date();
-          const currentMonth = currentDate.getMonth() + 1; // 0부터 시작하는 월 값을 1부터 시작하는 값으로 변경
-          const currentYear = currentDate.getFullYear(); // 현재 연도 가져오기
-
-          // 현재 달의 데이터만 필터링
-          const currentMonthData = expenditureData.filter(item => {
-            const itemDate = new Date(item.date);
-            const itemMonth = itemDate.getMonth() + 1;
-            const itemYear = itemDate.getFullYear();
-            return itemMonth === currentMonth && itemYear === currentYear; // 현재 연도의 현재 달에 해당하는 데이터만 필터링
-          });
-          
-          // 1. 모든 "amount" 값의 합 계산
-          const totalAmount = currentMonthData.reduce((acc, item) => acc + item.amount, 0);
-          
-          // 2. "문화생활" 카테고리의 합계를 고려한 값의 차 계산
-          const cultureTotal = currentMonthData
-            .filter(item => item.category === '문화생활')
-            .reduce((acc, item) => acc + item.amount, 0);
-          const adjustedTotalAmount = totalAmount - (cultureTotal * 0.3);
-          
-          // 3. 혜택 계산
-          const benefit = totalAmount - adjustedTotalAmount;
-
-          // 결과를 알림창으로 표시
-          alert(`적용 전: ${totalAmount.toLocaleString()}, 적용 후: ${adjustedTotalAmount.toLocaleString()}, 혜택: ${benefit.toLocaleString()}`);
-        } else {
-          alert('데이터 조회 실패');
-        }
-      } catch (error) {
-        alert('에러 발생: ' + error);
-    }
   }
+};
 
-}
-}
 </script>
-
 
 

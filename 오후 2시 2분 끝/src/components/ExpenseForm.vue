@@ -17,24 +17,24 @@
                 </button>
                 <button @click="showAddCategoryModal" class="btn btn-secondary btn-sm">+</button>
             </div>
-            <div class="form-group">
-                <label for="date">날짜:</label>
+            <div class="divbox">
+                <label for="date">날짜</label>
                 <input type="date" id="date" v-model="date" class="form-control" />
             </div>
-            <div class="form-group">
-                <label for="amount">금액:</label>
+            <div class="divbox">
+                <label for="amount">금액</label>
                 <input type="text" id="amount" v-model="formattedAmount" @input="formatAmount" class="form-control" />
             </div>
-            <div class="form-group">
-                <label for="description">메모:</label>
+            <div class="divbox">
+                <label for="description">메모</label>
                 <textarea id="description" v-model="description" class="form-control"></textarea>
             </div>
-            <div class="form-group" v-if="mode === 'expense'">
+            <div class="divbox" v-if="mode === 'expense'">
                 <label for="usage">사용처:</label>
                 <input type="text" id="usage" v-model="usage" class="form-control" />
             </div>
-            <div class="form-group">
-                <label for="file">이미지 첨부파일:</label>
+            <div class="divbox">
+                <label for="file">이미지 첨부파일</label>
                 <input type="file" id="file" @change="handleFileUpload" accept="image/*" class="form-control" />
             </div>
             <div v-if="imageUrl" class="mb-3 text-center">
@@ -438,6 +438,7 @@ export default {
     align-items: flex-start;
     width: 20%;
     margin-bottom: 50px;
+    width: 1010px;
 }
 
 .form-container .buttons,
@@ -446,6 +447,8 @@ export default {
     justify-content: center;
     margin-bottom: 10px;
     padding: auto;
+    width: 650px;
+    margin-left: 200px;
 }
 
 .table-container {
@@ -461,6 +464,10 @@ export default {
     margin-bottom: 10px;
     flex: 1;
     margin: 0 5px;
+}
+
+.form-container .buttons button.active:hover {
+    background-color: #d8b5a9; /* 원하는 호버 색상으로 변경 */
 }
 
 .form-container .buttons .active,
@@ -605,5 +612,26 @@ label {
 
 .form-control {
     width: 100%;
+}
+.divbox {
+    width: 1000px;
+    padding: 8px;
+    margin-left: 10px;
+}
+.btn-primary {
+    background-color: #967e76;
+    border-color: #967e76;
+}
+
+.btn-primary:hover {
+    background-color: #7d6a64;
+    border-color: #7d6a64;
+}
+.pagination .page-item:nth-child(2) .page-link {
+    background-color: #7d6a64; /* 원하는 색상으로 변경 */
+    border: none;
+}
+.action-buttons {
+    margin-left: 850px;
 }
 </style>

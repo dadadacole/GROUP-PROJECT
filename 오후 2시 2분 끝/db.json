@@ -26,6 +26,13 @@
       "amount": 1000,
       "type": "expense",
       "category": "문화생활"
+    },
+    {
+      "id": "62e1",
+      "date": "2024-06-25",
+      "amount": 1000,
+      "type": "expense",
+      "category": "교통"
     }
   ]
 }
